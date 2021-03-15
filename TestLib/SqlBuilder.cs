@@ -16,6 +16,7 @@ namespace TestLib
                 ExpressionType.Quote => ParseUnary(expression, depth),
                 ExpressionType.Lambda => ParseLambda(expression, depth),
                 ExpressionType.NotEqual => ParseNotEqual(expression, depth),
+                ExpressionType.Equal => ParseEqual(expression, depth),
                 ExpressionType.MemberAccess => ParseMemberAccess(expression, depth),
                 ExpressionType.Parameter => ParseParameter(expression, depth),
                 ExpressionType.New => ParseNew(expression, depth),
@@ -32,7 +33,9 @@ namespace TestLib
             for (int i = 0; i < newExp.Members.Count; i++)
             {
                 Tab(depth);
-                Console.WriteLine($"   {newExp.Members[i].Name}:{newExp.Arguments[i]}");
+                
+                Console.WriteLine($" {newExp.Members[i].Name}:{newExp.Arguments[i]}");
+                Parse(newExp.Arguments[i], depth + 1);
             }
 
             return Expression.Empty();
@@ -54,6 +57,18 @@ namespace TestLib
             Console.WriteLine($"Member : {member.Member.Name} {member.Member.DeclaringType}");
 
             return member.Expression != null ? Parse(member.Expression, depth + 1) : Expression.Empty();
+        }
+
+        private static Expression ParseEqual(Expression expression, int depth)
+        {
+            var notEqual = (BinaryExpression)expression;
+            Tab(depth);
+            Console.WriteLine($"Equal : {notEqual.Left} == {notEqual.Right}");
+
+            Parse(notEqual.Left, depth + 1);
+            Parse(notEqual.Right, depth + 1);
+
+            return Expression.Empty();
         }
 
         private static Expression ParseNotEqual(Expression expression, int depth)

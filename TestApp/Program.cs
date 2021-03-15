@@ -10,13 +10,14 @@ namespace TestApp
             using (var context = new MyDbContext())
             {
                 var haha = from p in context.People
-                           where p.Name != string.Empty
                            join t in context.Teams on p.Team equals t
+                           where p.Name != string.Empty
                            orderby p.Name descending
                            select new
                            {
-                               Person = p.Name,
-                               Team = t.Name
+                               Hello = p.Name,
+                               World = t.Name,
+                               Test = "hello"
                            };
 
                 foreach (var p in haha)
