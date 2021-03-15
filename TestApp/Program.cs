@@ -11,8 +11,8 @@ namespace TestApp
             {
                 var haha = from p in context.People
                            join t in context.Teams on p.Team equals t
-                           where p.Name != string.Empty
                            orderby p.Name descending
+                           where p.Name != string.Empty
                            select new
                            {
                                Hello = p.Name,

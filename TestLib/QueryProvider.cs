@@ -14,8 +14,6 @@ namespace TestLib
 
         public IQueryable<TElement> CreateQuery<TElement>(Expression expression)
         {
-            //var sql = SqlBuilder.Translate(expression);
-
             return new DbSet<TElement>(this, expression);
         }
 
@@ -28,6 +26,9 @@ namespace TestLib
         {
             var sql = SqlBuilder.Translate(expression);
 
+            Console.WriteLine("ASDFSADFASFSADFASDFASDFASDF");
+
+            SqlBuilder.Translate(sql);
             return default;
         }
     }
