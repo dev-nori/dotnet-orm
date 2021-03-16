@@ -17,11 +17,59 @@ namespace TestLib
                 ExpressionType.Lambda => ParseLambda(expression, depth),
                 ExpressionType.NotEqual => ParseNotEqual(expression, depth),
                 ExpressionType.Equal => ParseEqual(expression, depth),
+                ExpressionType.OrElse => ParseOrElse(expression, depth),
+                ExpressionType.AndAlso => ParseAndAlso(expression, depth),
+                ExpressionType.GreaterThan => ParseGreaterThan(expression, depth),
                 ExpressionType.MemberAccess => ParseMemberAccess(expression, depth),
                 ExpressionType.Parameter => ParseParameter(expression, depth),
                 ExpressionType.New => ParseNew(expression, depth),
                 _ => WhatType(expression),
             };
+        }
+
+        private static Expression ParseGreaterThan(Expression expression, int depth)
+        {
+            BinaryExpression binary = (BinaryExpression)expression;
+
+            Tab(depth);
+            Console.WriteLine($"Greater than L : {binary.Left}");
+            Parse(binary.Left, depth + 1);
+
+            Tab(depth);
+            Console.WriteLine($"Greater than R : {binary.Right}");
+            Parse(binary.Right, depth + 1);
+
+            return Expression.Empty();
+        }
+
+        private static Expression ParseAndAlso(Expression expression, int depth)
+        {
+            BinaryExpression binary = (BinaryExpression)expression;
+
+            Tab(depth);
+            Console.WriteLine($"And Also L : {binary.Left}");
+            Parse(binary.Left, depth + 1);
+
+            Tab(depth);
+            Console.WriteLine($"And Also R : {binary.Right}");
+            Parse(binary.Right, depth + 1);
+
+            return Expression.Empty();
+        }
+
+        private static Expression ParseOrElse(Expression expression, int depth)
+        {
+            BinaryExpression binary = (BinaryExpression)expression;
+
+            Tab(depth);
+            Console.WriteLine($"Else L : {binary.Left}");
+            Parse(binary.Left, depth + 1);
+
+            Tab(depth);
+            Console.WriteLine($"Else R : {binary.Right}");
+            Parse(binary.Right, depth + 1);
+
+            return Expression.Empty();
         }
 
         private static Expression ParseNew(Expression expression, int depth)
@@ -92,6 +140,7 @@ namespace TestLib
             {
                 Tab(depth);
                 Console.WriteLine($"   : {p}");
+                Parse(p, depth + 1);
             }
 
             return Parse(lambda.Body, depth + 1);
