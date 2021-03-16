@@ -24,7 +24,8 @@ namespace TestLib
 
         public TResult Execute<TResult>(Expression expression)
         {
-            SqlBuilder.Translate(expression);
+            var result = ExpressionTranslate.Translate(expression);
+            Console.WriteLine(result);
             return default;
         }
     }
