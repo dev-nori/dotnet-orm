@@ -21,6 +21,8 @@ namespace TestLib
         {
             var expression = Expression;
 
+            Console.WriteLine(ExpressionTranslateTemp.Parse(expression, 0));
+
             Clauses.AddRange(ExpressionTranslate.ParseClause(expression));
         }
 

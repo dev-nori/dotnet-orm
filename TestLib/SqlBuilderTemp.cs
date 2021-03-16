@@ -5,7 +5,7 @@ using System.Linq.Expressions;
 
 namespace TestLib
 {
-    public static class SqlBuilder
+    public static class SqlBuilderTemp
     {
         public static Expression Parse(Expression expression, int depth)
         {

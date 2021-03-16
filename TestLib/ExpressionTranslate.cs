@@ -23,11 +23,11 @@ namespace TestLib
             if (expression is MethodCallExpression methodCall)
             {
                 var result = new List<Clause>();
-                Clause clause = new Clause(methodCall);
+                Clause clause = ClauseFactory.CreateClause(methodCall);
                 result.Add(clause);
                 while ((methodCall = clause.GetNextClause()) != null)
                 {
-                    Clause nextClause = new Clause(methodCall);
+                    Clause nextClause = ClauseFactory.CreateClause(methodCall);
 
                     result.Add(nextClause);
 
