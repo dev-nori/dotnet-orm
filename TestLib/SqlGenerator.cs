@@ -11,6 +11,9 @@ namespace TestLib
 
         public SqlGenerator(List<Clause> clauses)
         {
+            //must first step is where
+            clauses.Reverse();
+
             stringBuilder = new StringBuilder();
             this.clauses = clauses;
         }
@@ -23,17 +26,17 @@ namespace TestLib
         {
             foreach (var clause in clauses)
             {
-                if (clause is SelectClause selectClause)
-                {
-                    NewType = ExpressionTranslate.ParseNewType(selectClause);
-                }
-                else if (clause is WhereClause whereClause)
+                if (clause is WhereClause whereClause)
                 {
                     DefaultType = ExpressionTranslate.ParseWhereType(whereClause);
                 }
                 else if (clause is JoinClause joinClause)
                 {
                     JoinType = ExpressionTranslate.ParseJoinType(joinClause);
+                }
+                else if (clause is SelectClause selectClause)
+                {
+                    NewType = ExpressionTranslate.ParseNewType(selectClause);
                 }
             }
 
