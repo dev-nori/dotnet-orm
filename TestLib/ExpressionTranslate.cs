@@ -64,7 +64,7 @@ namespace TestLib
             
             for (int i = 0; i < newExp.Members.Count; i++)
             {
-                result += Parse(newExp.Arguments[i], depth + 1);
+                result += Parse(newExp.Arguments[i], depth + 1).Replace("\n", "") + ", Member: " + newExp.Members[i].Name + "\n";
             }
 
             return result;
