@@ -3,19 +3,38 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace TestLib
 {
     public class ExpressionTranslate
     {
-        public static Expression Translate(Expression expression)
+        public static Type ParseNewType(SelectClause selectClause)
         {
-            return expression;
+            UnaryExpression unary = (UnaryExpression) selectClause.InnerExpression
+                .FirstOrDefault(c => c.NodeType == ExpressionType.Quote);
+
+            LambdaExpression lambda = (LambdaExpression)unary.Operand;
+
+            return lambda.ReturnType;
         }
 
-        public static Expression ParseMethod(Expression expression)
+        public static Type ParseJoinType(JoinClause joinClause)
         {
-            throw new NotImplementedException();
+            ConstantExpression constant = (ConstantExpression) joinClause.InnerExpression
+                .FirstOrDefault(c => c.NodeType == ExpressionType.Constant);
+
+            Type genericDbset = constant.Value.GetType();
+            return genericDbset.GetGenericArguments().First();
+        }
+
+        public static Type ParseWhereType(WhereClause whereClause)
+        {
+            ConstantExpression constant = (ConstantExpression)whereClause.InnerExpression
+                .FirstOrDefault(c => c.NodeType == ExpressionType.Constant);
+
+            Type genericDbset = constant.Value.GetType();
+            return genericDbset.GetGenericArguments().First();
         }
 
         public static IEnumerable<Clause> ParseClause(Expression expression)
@@ -41,5 +60,6 @@ namespace TestLib
                 throw new InvalidExpressionException("Only Method Call Expression");
             }
         }
+
     }
 }

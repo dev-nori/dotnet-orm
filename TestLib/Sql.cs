@@ -22,13 +22,13 @@ namespace TestLib
             var expression = Expression;
 
             Console.WriteLine(ExpressionTranslateTemp.Parse(expression, 0));
-
             Clauses.AddRange(ExpressionTranslate.ParseClause(expression));
         }
 
         public string GetQuery()
         {
-            return "Hello";
+            var queryGenerator = new SqlGenerator(Clauses);
+            return queryGenerator.Generate();
         }
     }
 }
