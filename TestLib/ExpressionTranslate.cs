@@ -60,7 +60,7 @@ namespace TestLib
         {
             NewExpression newExp = (NewExpression)expression;
 
-            var result = MakeResult(depth, "New");
+            var result = MakeResult(depth, $"New {newExp.Constructor}");
             
             for (int i = 0; i < newExp.Members.Count; i++)
             {
