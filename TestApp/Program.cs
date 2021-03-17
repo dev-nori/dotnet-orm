@@ -45,6 +45,7 @@ namespace TestApp
 
             foreach (var p in haha)
             {
+                
                 Console.WriteLine(p);
             }
         }

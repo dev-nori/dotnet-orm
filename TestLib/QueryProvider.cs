@@ -23,6 +23,9 @@ namespace TestLib
 
         public TResult Execute<TResult>(Expression expression)
         {
+            SqlTranslater sqlTranslater = new SqlTranslater();
+            var result = sqlTranslater.Translate(expression);
+
             Sql sql = new Sql(expression);
 
             string query = sql.GetQuery();

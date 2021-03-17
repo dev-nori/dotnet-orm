@@ -11,7 +11,6 @@ namespace TestLib
 
         public SqlGenerator(List<Clause> clauses)
         {
-            //must first step is where
             clauses.Reverse();
 
             stringBuilder = new StringBuilder();

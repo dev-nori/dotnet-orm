@@ -42,8 +42,10 @@ namespace TestLib
             if (expression is MethodCallExpression methodCall)
             {
                 var result = new List<Clause>();
+
                 Clause clause = ClauseFactory.CreateClause(methodCall);
                 result.Add(clause);
+
                 while ((methodCall = clause.GetNextClause()) != null)
                 {
                     Clause nextClause = ClauseFactory.CreateClause(methodCall);
@@ -61,5 +63,19 @@ namespace TestLib
             }
         }
 
+        public static void Translate(SelectClause clause)
+        {
+            
+        }
+
+        public static void Translate(WhereClause clause)
+        {
+
+        }
+
+        public static void Translate(JoinClause clause)
+        {
+
+        }
     }
 }
