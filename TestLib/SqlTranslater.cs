@@ -88,8 +88,11 @@ namespace TestLib
             }
             else if (m.Method.Name == "Join")
             {
-                this.Visit(m.Arguments[0]);
-                return this.Visit(m.Arguments[1]);
+                if (this.ParseJoinExpression(m))
+                {
+                    Expression nextExpression = m.Arguments[0];
+                    return this.Visit(nextExpression);
+                }
             }
 
              return Expression.Empty();
@@ -114,12 +117,6 @@ namespace TestLib
             return u;
         }
 
-
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="b"></param>
-        /// <returns></returns>
         protected override Expression VisitBinary(BinaryExpression b)
         {
             sb.Append("(");
@@ -264,8 +261,6 @@ namespace TestLib
             UnaryExpression unary = (UnaryExpression)expression.Arguments[1];
             LambdaExpression lambdaExpression = (LambdaExpression)unary.Operand;
 
-            //lambdaExpression = (LambdaExpression)Evaluator.PartialEval(lambdaExpression);
-
             MemberExpression body = lambdaExpression.Body as MemberExpression;
             if (body != null)
             {
@@ -333,6 +328,11 @@ namespace TestLib
                 });
             _selectClause = string.Join(", ", result);
                 
+            return true;
+        }
+
+        private bool ParseJoinExpression(MethodCallExpression m)
+        {
             return true;
         }
     }
