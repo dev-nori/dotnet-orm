@@ -15,8 +15,8 @@ namespace TestApp
             //           }).FirstOrDefault();
 
             var haha = from p in context.People
-                       where p.Name != string.Empty && p.Id == 0 || p.Id > 2
                        join t in context.Teams on p.Team equals t
+                       where p.Name != string.Empty && p.Id == 0 || t.Name != string.Empty
                        orderby p.Name descending
                        select new
                        {

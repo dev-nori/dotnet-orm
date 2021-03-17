@@ -25,7 +25,7 @@ namespace TestLib
             this.sb = new StringBuilder();
             this.Visit(expression);
             _whereClause = this.sb.ToString();
-            return _whereClause;
+            return $"SELECT {_selectClause} FROM ---- WHERE {_whereClause} ORDER BY {_orderBy}";
         }
 
         private static Expression StripQuotes(Expression e)
@@ -88,8 +88,8 @@ namespace TestLib
             }
             else if (m.Method.Name == "Join")
             {
-                Expression nextExpression = m.Arguments[0];
-                return this.Visit(nextExpression);
+                this.Visit(m.Arguments[0]);
+                return this.Visit(m.Arguments[1]);
             }
 
              return Expression.Empty();
@@ -235,13 +235,20 @@ namespace TestLib
         {
             if (m.Expression != null && m.Expression.NodeType == ExpressionType.Parameter)
             {
-                sb.Append(m.Member.Name);
+                sb.Append(m.ToString());
+                return m;
+            }
+
+            if (m.Expression != null && m.Expression.NodeType == ExpressionType.MemberAccess)
+            {
+                MemberExpression me = (MemberExpression)m.Expression;
+                sb.Append($"[{me.Member.Name}].[{m.Member.Name}]");
                 return m;
             }
 
             if (m.ToString() == "String.Empty")
             {
-                sb.Append(" ");
+                sb.Append("' '");
                 return m;
             }
             throw new NotSupportedException(string.Format("The member '{0}' is not supported", m.Member.Name));
@@ -262,13 +269,14 @@ namespace TestLib
             MemberExpression body = lambdaExpression.Body as MemberExpression;
             if (body != null)
             {
+                MemberExpression inner = (MemberExpression)body.Expression;
                 if (string.IsNullOrEmpty(_orderBy))
                 {
-                    _orderBy = string.Format("{0} {1}", body.Member.Name, order);
+                    _orderBy = string.Format("[{0}].[{1}] {2}", inner.Member.Name, body.Member.Name, order);
                 }
                 else
                 {
-                    _orderBy = string.Format("{0}, {1} {2}", _orderBy, body.Member.Name, order);
+                    _orderBy = string.Format("[{0}].[{1}] {2} {3}", _orderBy, inner.Member.Name, body.Member.Name, order);
                 }
 
                 return true;
@@ -324,8 +332,6 @@ namespace TestLib
                     return $"[{typeAlias}].[{propertyName}]";
                 });
             _selectClause = string.Join(", ", result);
-
-            sb.Append($"SELECT {_selectClause}");
                 
             return true;
         }

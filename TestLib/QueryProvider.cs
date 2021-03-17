@@ -25,6 +25,7 @@ namespace TestLib
         {
             SqlTranslater sqlTranslater = new SqlTranslater();
             var result = sqlTranslater.Translate(expression);
+            Console.WriteLine(result);
 
             Sql sql = new Sql(expression);
 
